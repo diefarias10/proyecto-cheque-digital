@@ -9,17 +9,17 @@ import FormChequeModal from './FormChequeModal';
 
 const LibrarCheque = () => {
     const [modoLibrar, setModoLibrar] = useState(false)
-    const { data, setData } = useContext(Contexto)
+    const { data, setData, refrescar, setRefrescar } = useContext(Contexto)
     const [numReserv, setNumReserv] = useState(0)
     const [cheques, setCheques] = useState([])
     const [loading, setLoading] = useState(true)
     const [verDetalle, setVerDetalle] = useState(false)
-    const [verCheque, setVerCheque] = useState(null)
+    const [verCheque, setVerCheque] = useState({})
 
 
     useEffect(() => {
-        obtengoCheques();
-    }, []);
+        obtengoCheques()
+    }, [refrescar])
 
     const obtengoCheques = () => {
         /*Obtengo los cheques por API*/
@@ -32,12 +32,14 @@ const LibrarCheque = () => {
             })
             .then((response) => response.json())
             .then((responseJson) => {
+               
                 setCheques([])
                 setLoading(false)
 
                 responseJson.forEach((cuenta) => { // Recorro las cuentas
                     if (cuenta.CuentaActiva === true) {
-                        cuenta.ChequesLibrados.forEach((cheque) => { // Recorro cheques RECIBIDOS de la cuenta
+
+                        cuenta.ChequesLibrados.forEach((cheque) => { // Recorro cheques LIBRADOS de la cuenta
                             if (cheque.NroCheque != '') {
 
                                 setCheques(cheques => [
@@ -50,8 +52,10 @@ const LibrarCheque = () => {
                                         EstadoCheque: cheque.EstadoCheque.trim(),
                                         VencimientoCheque: cheque.VencimientoCheque.trim(),
                                         LibradoCheque: cheque.LibradoCheque.trim(),
+                                        CuentaCheque: cuenta.CuentaNumero.trim(),
                                         BeneficiarioCheque: cheque.BeneficiarioCheque.trim(),
                                         CMC7Cheque: cheque.CMC7Cheque.trim(),
+
                                     }])
                             }
                         })
@@ -80,7 +84,7 @@ const LibrarCheque = () => {
     }
 
     const agregarChequeHandler = (chequeNuevo) => {
-        /*LLAMO SERVICIO DE ALTA CHEQUE*/
+        /* LLAMO SERVICIO DE ALTA CHEQUE */
         fetch('http://192.168.1.9:8585/CHD_POC/com.echeq.ahttpaltamovil?'
             + numReserv + ","
             + chequeNuevo.BancoID + ","
@@ -97,14 +101,15 @@ const LibrarCheque = () => {
             + chequeNuevo.BenefNombre + ","
             + chequeNuevo.ImporteCheque + ","
             + chequeNuevo.VencimientoCheque,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
             .then((response) => response.json())
             .then((responseJson) => {
+                console.log('Entre a agregarCheque')
                 console.log(responseJson)
                 if (responseJson.exito === false) {
                     Alert.alert('Error!', 'No se pudo librar el cheque', [{ text: 'Ok' }]);
@@ -122,19 +127,22 @@ const LibrarCheque = () => {
                             EstadoCheque: chequeNuevo.EstadoCheque,
                             VencimientoCheque: chequeNuevo.VencimientoCheque,
                             LibradorCheque: chequeNuevo.LibradorCheque,
+                            CuentaCheque: chequeNuevo.CtaChequeNro,
                             BeneficiarioCheque: chequeNuevo.BenefNombre,
                             CMC7Cheque: responseJson.cmc7,
                         }])
                 }
             })
+
+            setRefrescar(!refrescar)
     }
 
-    const switchForm = () => {
+    const switchForm = () => { /* Abre/Cierra formulario de cheque nuevo */
         reservoNumero()
         setModoLibrar(!modoLibrar)
     }
 
-    const switchDetalle = (item) => {
+    const switchDetalle = (item) => { /* Abre/Cierra detalle de cheque seleccionado */
         setVerDetalle(!verDetalle)
         setVerCheque(item)
     }
@@ -169,6 +177,7 @@ const LibrarCheque = () => {
                                 estado={item.EstadoCheque}
                                 vencimiento={item.VencimientoCheque}
                                 librador={item.LibradorCheque}
+                                cuenta={item.CuentaCheque}
                                 beneficiario={item.BeneficiarioCheque}
                                 banda={item.CMC7Cheque}
                                 visualizar={switchDetalle}

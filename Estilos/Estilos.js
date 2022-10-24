@@ -72,31 +72,56 @@ const estilos = StyleSheet.create({
         letterSpacing: 1
     },
 
-    textoChequeEstadoOk: {
-        backgroundColor: '#28a745',
-        color: 'white',
+    textoChequeEstadoNuevo: {
+        backgroundColor: '#cff4fc',
+        color: '#055160',
         fontWeight: 'bold',
         paddingHorizontal: 12,
         width: '100%',
         borderWidth: 1,
-        borderColor: '#28a745',
-        marginVertical: 5,
-        textAlign: 'center',
-        elevation: 2
-    },
-    textoChequeEstadoRech: {
-        backgroundColor: '#dc3545',
-        color: 'white',
-        fontWeight: 'bold',
-        paddingHorizontal: 12,
-        width: '100%',
-        borderWidth: 1,
-        borderColor: '#dc3545',
+        borderColor: '#b6effb',
         marginVertical: 5,
         textAlign: 'center',
         elevation: 2
     },
 
+    textoChequeEstadoOk: {
+        backgroundColor: '#d1e7dd',
+        color: '#0f5132',
+        fontWeight: 'bold',
+        paddingHorizontal: 12,
+        width: '100%',
+        borderWidth: 1,
+        borderColor: '#badbcc',
+        marginVertical: 5,
+        textAlign: 'center',
+        elevation: 2
+    },
+    textoChequeEstadoRech: {
+        backgroundColor: '#f8d7da',
+        color: '#842029',
+        fontWeight: 'bold',
+        paddingHorizontal: 12,
+        width: '100%',
+        borderWidth: 1,
+        borderColor: '#f5c2c7',
+        marginVertical: 5,
+        textAlign: 'center',
+        elevation: 2
+    },
+
+    textoChequeEstadoPend: {
+        backgroundColor: '#fff3cd',
+        color: '#664d03',
+        fontWeight: 'bold',
+        paddingHorizontal: 12,
+        width: '100%',
+        borderWidth: 1,
+        borderColor: '#ffecb5',
+        marginVertical: 5,
+        textAlign: 'center',
+        elevation: 2
+    },
 
     listaCheques: {
         width: '95%',
@@ -135,7 +160,7 @@ const estilos = StyleSheet.create({
     },
 
     header: {
-        backgroundColor: '#FFF',
+        backgroundColor: 'white',
         width: '100%',
         flexDirection: 'row',
         borderBottomRightRadius: 0,
@@ -212,7 +237,8 @@ const estilos = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 15,
+        marginTop: 15,
+        marginBottom:5,
         paddingVertical: 14,
     },
 
@@ -265,21 +291,34 @@ const estilos = StyleSheet.create({
     },
 
     formContainer: {
+   
         alignItems: 'center',
         flex: 1
     },
 
     detalleModal: {
         backgroundColor: 'white',
-        paddingHorizontal: 15,
-        borderTopRightRadius: 25,
-        borderTopLeftRadius: 25,
+        paddingHorizontal: 0,
+        justifyContent: 'space-evenly',
         flex: 1,
         elevation: 4
     },
 
     modalAcciones: {
         padding: 20,
+
+    },
+
+    btnCerrarModal: {
+        borderBottomLeftRadius: 50,
+        borderBottomRightRadius: 50,
+        backgroundColor: '#7699D0',
+        alignItems: 'center',
+        paddingVertical: 5,
+        position: 'absolute',
+        width: '100%',
+        top: 5,
+        elevation: 4
     },
 
     btnModal: {

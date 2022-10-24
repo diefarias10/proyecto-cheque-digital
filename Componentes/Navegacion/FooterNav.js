@@ -61,7 +61,7 @@ const Tabs = ({ route }) => {
             <Tab.Screen name="Librar" component={LibrarCheque}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <FontAwesome5 name="money-check-alt" size={38} color="white" />
+                        <FontAwesome5 name="money-check" size={35} color="white" />
                     ),
                     tabBarButton: (props) => (
                         <BotonLibrar {...props} />

@@ -3,6 +3,7 @@ import { Text, TextInput, View, FlatList, Modal, TouchableOpacity, ScrollView } 
 import SelectDropdown from 'react-native-select-dropdown';
 import estilos from '../../../Estilos/Estilos';
 import Cheque from '../Cheque/Cheque';
+import ChequeDetalle from '../Cheque/ChequeDetalle';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { CheckBox } from 'react-native-elements';
 import { Contexto } from '../../../Storage/ContextoProvider';
@@ -157,14 +158,33 @@ const FormChequeModal = (props) => {
     }
 
     return (
-        <Modal visible={props.visible} animationType='slide' transparent={true}>
-            <ScrollView style={{ backgroundColor: 'white', borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+        <Modal visible={props.visible} animationType='slide' transparent={false}>
+            <View style={{
+                backgroundColor: '#7699D0', width: '100%', paddingTop: 5, elevation: 5, borderBottomLeftRadius: 50,
+                borderBottomRightRadius: 50,
+            }}>
+                <Text style={estilos.txtTituloForm}>
+                    CHEQUE NUEVO
+                </Text>
+            </View>
+            <View style={{ paddingHorizontal: 10, paddingBottom: 20}}>
+                <Cheque
+                    numero={datosChequeNuevo.nroCheque}
+                    tipo={datosChequeNuevo.tipoCheque}
+                    moneda={datosChequeNuevo.monedaCheque}
+                    importe={datosChequeNuevo.importeCheque}
+                    estado='NUEVO'
+                    vencimiento={datosChequeNuevo.vencCheque}
+                    librador={data.usuario}
+                    beneficiario={datosChequeNuevo.benefCheque}
+                    beneficiarioCI={datosChequeNuevo.benefNroDoc}
+                    banda=''
+                    visualizar={()=>{}}
+                />
+            </View>
+            <ScrollView style={{ backgroundColor: 'white', borderTopRightRadius: 20,borderTopLeftRadius: 20, elevation: 10 }}>
                 <View style={estilos.formContainer}>
-                    <View style={{ backgroundColor: '#7699D0', width: '100%', borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 10 }}>
-                        <Text style={estilos.txtTituloForm}>
-                            CHEQUE NUEVO
-                        </Text>
-                    </View>
+
                     <View style={{ flexDirection: 'row' }}>
                         <View style={{ marginVertical: 5, width: '95%', flexDirection: 'row' }}>
                             <CheckBox
@@ -322,21 +342,9 @@ const FormChequeModal = (props) => {
                         <TextInput name='sucursalNro' placeholder="Nº sucursal" style={estilos.formInput} onChangeText={(numero) => cambiarNroSuc(numero)} />
                     </View>
                     <View style={{ width: '90%' }} >
-                        <Cheque
-                            numero={datosChequeNuevo.nroCheque}
-                            tipo={datosChequeNuevo.tipoCheque}
-                            moneda={datosChequeNuevo.monedaCheque}
-                            importe={datosChequeNuevo.importeCheque}
-                            estado='NUEVO'
-                            vencimiento={datosChequeNuevo.vencCheque}
-                            librador={data.usuario}
-                            beneficiario={datosChequeNuevo.benefCheque}
-                            beneficiarioCI={datosChequeNuevo.benefNroDoc}
-                            banda=''
-                        />
                         <View style={estilos.panelBotonesForm}>
                             <TouchableOpacity onPress={confirmoChequeHandler}>
-                                <View >
+                                <View>
                                     <FontAwesome name="check-circle" size={80} color="#1EA966" />
                                 </View>
                             </TouchableOpacity>
@@ -345,7 +353,6 @@ const FormChequeModal = (props) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-
                 </View>
             </ScrollView>
         </Modal>

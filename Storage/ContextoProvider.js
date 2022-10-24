@@ -5,9 +5,10 @@ const Contexto = createContext();
 const ContextoProvider = ({ children }) => {
 
     const [data, setData] = useState({ usuario: '', tipoUsuario: '', banco: '', cuentas: [] })
+    const [refrescar, setRefrescar] = useState(true)
 
     return (
-        <Contexto.Provider value={{ data, setData }}>
+        <Contexto.Provider value={{ data, setData, refrescar, setRefrescar }}>
             {children}
         </Contexto.Provider>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import estilos from '../../../Estilos/Estilos';
+import EstadoCheque from './EstadoCheque/EstadoCheque';
 
 
 const Cheque = (props) => {
@@ -26,6 +27,7 @@ const Cheque = (props) => {
             importeCheque: props.importe,
             vencCheque: props.vencimiento,
             libradorCheque: props.librador,
+            cuentaCheque: props.cuenta,
             beneficiarioCheque: props.beneficiario,
             estadoCheque: props.estado,
             bandaCheque: props.banda
@@ -69,9 +71,8 @@ const Cheque = (props) => {
                         </View>
                     </View>
                     <View /*FILA 5 */>
-                        <View >
-                            <Text style={props.estado == 'RECHAZADO' ? estilos.textoChequeEstadoRech : estilos.textoChequeEstadoOk}>{props.estado}</Text>
-                        </View>
+                        
+                        <EstadoCheque estadoCheque={props.estado} />
                     </View>
                     <View style={{ alignItems: 'center', backgroundColor: '#FFFFFF80' }} /*FILA 6*/>
                         <View style={{ justifyContent: 'center' }}>
