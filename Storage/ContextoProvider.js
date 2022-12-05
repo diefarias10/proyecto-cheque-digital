@@ -4,7 +4,7 @@ const Contexto = createContext();
 
 const ContextoProvider = ({ children }) => {
 
-    const [data, setData] = useState({ usuario: '', tipoUsuario: '', banco: '', cuentas: [] })
+    const [data, setData] = useState({ usuario: '', tipoUsuario: '', banco: ''})
     const [refrescar, setRefrescar] = useState(true)
 
     return (

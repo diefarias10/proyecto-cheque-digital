@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View, TouchableOpacity, Alert, Picker } from 'react-native';
-import estilos from '../../Estilos/Estilos';
+import { Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet } from 'react-native';
+import PALETA from '../../Utilidades/Paleta';
 
 const LoginNoBancarizado = ({ navigation }) => {
 
@@ -63,5 +64,70 @@ const LoginNoBancarizado = ({ navigation }) => {
         </View>
     );
 };
+
+const estilos = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        backgroundColor: '#1B262C',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%'
+    },
+
+    carta: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        borderColor: 'darkgrey',
+        width: '90%',
+        alignItems: 'center',
+        paddingVertical: 20,
+        paddingHorizontal: 10
+    },
+
+    txtTitulo: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: '#081D3C',
+        alignSelf: 'center'
+    },
+
+    txtSubtitulo: {
+        fontSize: 20,
+        alignSelf: 'center',
+        color: '#081D3C',
+        fontWeight: 'bold'
+    },
+
+    loginLabel: {
+        marginBottom: 3,
+        color: '#081D3C',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFF'
+    },
+
+    loginInput: {
+        height: 40,
+        width: '100%',
+        borderWidth: 1,
+        borderColor: 'transparent',
+        backgroundColor: 'white',
+        color: '#1B262C',
+        borderRadius: 5,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontSize: 18
+    },
+
+    btnNormal: {
+        backgroundColor: PALETA[3],
+        borderRadius: 5,
+        width: '100%',
+        paddingVertical:15,
+        alignItems: 'center',
+    },
+
+})
 
 export default LoginNoBancarizado;

@@ -1,9 +1,7 @@
 import React from 'react';
-import { Text, View, Button, TouchableOpacity } from 'react-native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import estilos from '../../Estilos/Estilos';
-
+import { Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import PALETA from '../../Utilidades/Paleta';
 
 
 const HomeBanking = ({ navigation }) => {
@@ -39,5 +37,54 @@ const HomeBanking = ({ navigation }) => {
         </View>
     );
 };
+
+const estilos = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        backgroundColor: PALETA[1],
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%'
+    },
+
+    carta: {
+        backgroundColor: '#FFF',
+        borderRadius: 10,
+        borderColor: 'darkgrey',
+        width: '90%',
+        alignItems: 'center',
+        paddingVertical: 20,
+        paddingHorizontal: 10
+    },
+
+    txtTitulo: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        color: '#081D3C',
+        alignSelf: 'center'
+    },
+
+    btnMenuDisabled: {
+        backgroundColor: '#6c757d',
+        width: '90%',
+        borderWidth: 1,
+        borderRadius: 5,
+        textAlign: 'center',
+        marginVertical: 15,
+        paddingVertical: 14,
+    },
+
+    btnMenuSelec: {
+        backgroundColor: PALETA[3],
+        borderBottomRightRadius: 20,
+        borderBottomLeftRadius: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        elevation: 4
+    },
+
+})
 
 export default HomeBanking;

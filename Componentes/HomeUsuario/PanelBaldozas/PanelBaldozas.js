@@ -1,91 +1,152 @@
 import React, { useState, useContext, useEffect } from 'react';
-import estilos from '../../../Estilos/Estilos';
-import { ScrollView } from 'react-native';
+import { View, ScrollView, FlatList } from 'react-native';
 import Baldoza from './Baldoza/Baldoza';
 import { Contexto } from '../../../Storage/ContextoProvider';
+import SERVICIOS from '../../../Utilidades/Servicios';
 
 const PanelBaldozas = (props) => {
 
-    const { data, setData } = useContext(Contexto);
-    const [cantCartera, setCantCartera] = useState(0);
-    const [cantLibrados, setCantLibrados] = useState(0);
-    const [cantAceptados, setCantAceptados] = useState(0);
-    const [cantRechazados, setCantRechazados] = useState(0);
-    const [cantDepositados, setCantDepositados] = useState(0);
+    const { data, setData, refrescar, setRefrescar } = useContext(Contexto);
+    const [loading, setLoading] = useState(true)
+    const [baldozas, setBaldozas] = useState([])
+    const [contadores, setContadores] = useState({
+        cartera: 0,
+        librados: 0,
+        aceptados: 0,
+        rechazados: 0,
+        depositados: 0,
+        securecheck: 0
+    })
 
     useEffect(() => {
+        obtengoCantidades()
+    }, [refrescar]);
+
+    const obtengoCantidades = () => {
         /*Obtengo los cheques por API*/
 
-        fetch('http://192.168.1.9:8585/CHD_POC/com.echeq.aws_bancocuentasget?' + props.banco + "," + props.usuario + "'",
+        fetch(SERVICIOS.ChequesPersona + '1,1,' + data.cedula,
             {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
+                headers: { 'Content-Type': 'application/json' }
             })
             .then((response) => response.json())
             .then((responseJson) => {
 
-                let cuentasUsuario = []
+                setLoading(false)
+                let cantidades = {
+                    cartera: 0,
+                    librados: 0,
+                    aceptados: 0,
+                    rechazados: 0,
+                    depositados: 0,
+                    securecheck: 0,
+                }
 
-                responseJson.forEach((cuenta) => { // Recorro las cuentas
-                    let cuentoLibrados = 0
-                    let cuentoRecibidos = 0
-                    let cuentoAceptados = 0
+                responseJson.forEach((object) => {
+                    object.ChequesLibrados.forEach((cheque) => {
 
+                        switch (cheque.EstadoCheque) {
+                            case 'PENDIENTE DE ACEPTAR':
+                                cantidades.librados += 1
+                                break
+                            case 'CHEQUE ACEPTADO':
+                                cantidades.aceptados += 1
+                                break
+                            case 'CHEQUE RECHAZADO':
+                                cantidades.rechazados += 1
+                                break
+                            case 'DEPOSITADO':
+                                cantidades.depositados += 1
+                                break
 
-                    if (cuenta.CuentaActiva === true) { // Guardo los nros de cuenta para usar despues
+                        }
+                    })
 
-                        cuentasUsuario.push({
-                            nombreCta: cuenta.CuentaNombre,
-                            numeroCta: cuenta.CuentaNumero,
-                            sucursalCta: cuenta.CuentaSucursal
-                        })
+                    object.ChequesRecibidos ?
 
-                        cuenta.ChequesLibrados.forEach((cheque) => { // Recorro cheques LIBRADOS de la cuenta
-                            if (cheque.NroCheque != '') {
+                        object.ChequesRecibidos.forEach((cheque) => {
+                            cantidades.cartera += 1
 
-                                cuentoLibrados += 1
-                                setCantLibrados(cuentoLibrados)
+                            if (cheque.EstadoCheque == 'ENVIADO SECURECHECK') {
+                                cantidades.securecheck += 1
                             }
                         })
-
-                        cuenta.ChequesLibrados.forEach((cheque) => { // Recorro cheques LIBRADOS de la cuenta y cuento los ACEPTADOS
-                            if (cheque.NroCheque != '' && cheque.EstadoCheque === 'CHEQUE ACEPTADO') {
-
-                                cuentoAceptados += 1
-                                setCantAceptados(cuentoAceptados)
-                            }
-                        })
-
-                        cuenta.ChequesRecibidos.forEach((cheque) => { // Recorro cheques RECIBIDOS de la cuenta
-                            if (cheque.NroCheque != '') {
-
-                                cuentoRecibidos += 1
-                                setCantCartera(cuentoRecibidos)
-                            }
-                        })
-                    }
-                    
-                    setData({ ...data, cuentas: cuentasUsuario })
-                    
+                        : console.log('')
                 })
 
+                /* setContadores({
+                     cartera: cantidades.cartera,
+                     librados: cantidades.librados,
+                     aceptados: cantidades.aceptados,
+                     rechazados: cantidades.rechazados,
+                     depositados: cantidades.depositados,
+                     securecheck: cantidades.securecheck
+                 })*/
+
+                setBaldozas([{
+                    titulo: 'CARTERA',
+                    imagen: require('../../../assets/Cartera.png'),
+                    cantidad: cantidades.cartera,
+                    texto: 'Cheques recibidos en cartera'
+                },
+                {
+                    titulo: 'LIBRADOS',
+                    imagen: require('../../../assets/Librados.png'),
+                    cantidad: cantidades.librados,
+                    texto: 'Cheques librados por ti'
+                },
+                {
+                    titulo: 'ACEPTADOS',
+                    imagen: require('../../../assets/Aceptados.png'),
+                    cantidad: cantidades.aceptados,
+                    texto: 'Cheques aceptados por beneficiario'
+                },
+                {
+                    titulo: 'RECHAZADOS',
+                    imagen: require('../../../assets/Rechazados.png'),
+                    cantidad: cantidades.rechazados,
+                    texto: 'Cheques rechazados por beneficiario'
+                },
+                {
+                    titulo: 'DEPOSITADOS',
+                    imagen: require('../../../assets/Depositados.png'),
+                    cantidad: cantidades.depositados,
+                    texto: 'Cheques depositados en banco'
+                },
+                {
+                    titulo: 'SECURECHECK',
+                    imagen: require('../../../assets/DepositadosSC.png'),
+                    cantidad: cantidades.securecheck,
+                    texto: 'Cheques depositados en SecureCheck'
+                }])
             })
 
-    }, []);
-
+    }
 
     /*TODO: HACER QUE EL USEFFECT SE EJECUTE CADA VEZ QUE EL USUARIO HAGA SCROLL PARA ACUTALIZAR CON REFRESHCONTROL*/
 
     return (
-        <ScrollView style={{ width: '80%' }} >
-            <Baldoza rutaImg={require('../../../assets/Cartera.png')} nombre={'CARTERA'} cantidad={cantCartera} descripcion={'Cheques recibidos en cartera'} />
-            <Baldoza rutaImg={require('../../../assets/Librados.png')} nombre={'LIBRADOS'} cantidad={cantLibrados} descripcion={'Cheques librados por mi'} />
-            <Baldoza rutaImg={require('../../../assets/Aceptados.png')} nombre={'ACEPTADOS'} cantidad={cantAceptados} descripcion={'Cheques aceptados por beneficiario'} />
-            <Baldoza rutaImg={require('../../../assets/Rechazados.png')} nombre={'RECHAZADOS'} cantidad={cantRechazados} descripcion={'Cheques rechazados por beneficiario'} />
-            <Baldoza rutaImg={require('../../../assets/Depositados.png')} nombre={'DEPOSITADOS'} cantidad={cantDepositados} descripcion={'Cheques depositados en banco'} />
-        </ScrollView>
+        <View style={{ flex: 1,width: '100%', alignItems: 'center'}}>
+            
+            <FlatList
+                onRefresh={() => obtengoCantidades()}
+                refreshing={loading}
+                keyExtractor={(item, index) => index.toString()}
+                data={baldozas}
+                renderItem={({ item }) => (
+                    <Baldoza
+                        nombre={item.titulo}
+                        rutaImg={item.imagen}
+                        descripcion={item.texto}
+                        cantidad={item.cantidad}
+                    />
+                )}
+            />
+            
+           
+        </View>
+
     );
 };
 
