@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { View, Image, TouchableOpacity, Modal, StyleSheet, Text,TouchableWithoutFeedback } from 'react-native';
+import { View, Image, TouchableOpacity, Modal, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
 import PALETA from "../Utilidades/Paleta";
 
-const Popup = ({ visible , children }) => {
+const Popup = ({ visible, children }) => {
     const [verPopup, setVerPopup] = useState(visible)
 
     useEffect(() => {
@@ -16,9 +16,9 @@ const Popup = ({ visible , children }) => {
         <Modal transparent visible={verPopup} animationType='fade'>
             <View style={estilos.transparencia}>
                 <View style={estilos.popup}>
-                    
-                        {children}
-                    
+
+                    {children}
+
                 </View>
             </View>
         </Modal>
@@ -38,7 +38,11 @@ const estilos = StyleSheet.create({
         width: '90%',
         borderRadius: 20,
         padding: 20,
-        elevation: 20
+        elevation: 20,
+        shadowColor: PALETA[1],
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
     },
 
     container: {
@@ -47,7 +51,7 @@ const estilos = StyleSheet.create({
         alignItems: 'center'
     },
 
-    txtTitulo:{
+    txtTitulo: {
         color: PALETA[1],
         fontWeight: 'bold',
         fontSize: 22
@@ -57,7 +61,7 @@ const estilos = StyleSheet.create({
         width: '100%',
         color: 'darkgrey',
         fontSize: 20,
-    }
+    },
 })
 
 export default Popup

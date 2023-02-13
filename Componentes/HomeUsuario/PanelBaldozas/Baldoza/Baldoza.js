@@ -8,17 +8,22 @@ const Baldoza = (props) => {
     return (
 
         <View style={[estilos.baldoza, estilos.shadowed]}>
-            <View style={[estilos.tituloContainer, estilos.shadowed]}>
-                <Text style={estilos.baldozaTitulo}>{props.nombre}</Text>
-            </View>
 
             <Image source={props.rutaImg} style={{ height: 150, width: 150 }} />
 
+            <View>
+                <View style={[estilos.tituloContainer]}>
+                    <Text style={estilos.baldozaTitulo}>{props.nombre}</Text>
+                </View>
 
-            <Text style={estilos.baldozaTexto}>{props.descripcion}</Text>
+                <Text style={estilos.baldozaTexto}>{props.descripcion}</Text>
+            </View>
 
             <View style={estilos.contador}>
+
                 <Text style={estilos.baldozaNumero}>{props.cantidad}</Text>
+                <Text style={{ fontSize: 15 }}>Cheques</Text>
+
             </View>
         </View>
     );
@@ -27,70 +32,54 @@ const Baldoza = (props) => {
 const estilos = StyleSheet.create({
 
     baldoza: {
-        width: 300,
-        height: 300,
-        backgroundColor: '#FFF',
-        borderRadius: 20,
-        borderColor: 'darkgrey',
+        backgroundColor: PALETA[4],
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: PALETA[3],
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         paddingHorizontal: 20,
-        marginVertical: 40,
-        elevation: 5,
+        paddingBottom: 20,
+        marginVertical: 20,
     },
 
     tituloContainer: {
-        width: '80%',
-        backgroundColor: PALETA[3],
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        borderBottomRightRadius: 20,
-        borderBottomLeftRadius: 20,
+        width: '100%',
         marginBottom: 5
     },
 
     baldozaTitulo: {
-        fontSize: 20,
-        alignSelf: 'center',
-        color: '#FFF',
+        fontSize: 23,
+        color: PALETA[1],
         fontWeight: 'bold'
     },
 
     contador: {
-        width: '50%',
+        position: 'absolute',
+        top: 50,
+        right: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: PALETA[2],
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-        marginTop: 5,
         paddingVertical: 5,
-        shadowColor: PALETA[1],
-        shadowOffset: { width: 0, height: -2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 1,
-        elevation: 4
     },
 
     baldozaNumero: {
         fontWeight: 'bold',
         letterSpacing: 1,
-        fontSize: 25,
-        color: '#FFF',
+        fontSize: 50,
+        color: PALETA[1],
     },
 
     baldozaTexto: {
         marginBottom: 10,
-        fontSize: 20,
-        textAlign: 'center',
+        fontSize: 18,
         color: PALETA[1]
     },
 
     shadowed: {
         shadowColor: PALETA[1],
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
         shadowRadius: 3,
         elevation: 4
     },

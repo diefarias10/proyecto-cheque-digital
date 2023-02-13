@@ -1,14 +1,20 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import LogoBanco from '../../Utilidades/LogoBanco';
 import { StyleSheet } from 'react-native';
 import PALETA from '../../Utilidades/Paleta';
+import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+
 
 
 const Header = (props) => {
 
+    
     return (
-        <View style={[estilos.header, estilos.shadowed]}>
+        <View style={[estilos.header]}>
+            <View style={estilos.logoHeader} /* AREA 2*/>
+                <LogoBanco banco={props.bancoID} ancho={45} alto={45} />
+            </View>
             <View style={estilos.datosHeader} /* AREA 1*/>
                 <Text style={estilos.txtHeader}>
                     {props.nombre}
@@ -16,15 +22,15 @@ const Header = (props) => {
 
                 {
                     props.tipoUsuario === 'HB' ?
-                        <Text style={estilos.txtHeader}>Banco {props.banco}</Text>
+                        <Text style={[estilos.txtHeader, { fontSize: 15, fontWeight: 'normal', color: 'darkgrey' }]}>Banco {props.banco}</Text>
                         :
-                        <Text style={estilos.txtHeader}>No Bancarizado</Text>
+                        <Text style={[estilos.txtHeader, { fontSize: 15, fontWeight: 'normal', color: 'darkgrey' }]}>No Bancarizado</Text>
                 }
 
             </View>
-            <View style={estilos.logoHeader} /* AREA 2*/>
-                <LogoBanco banco={props.bancoID} ancho={50} alto={50} />
-            </View>
+            <TouchableOpacity style={{ justifyContent: 'center', right: 10 }} onPress={()=>{props.logOut()}}>
+                <FontAwesome name="sign-out" size={35} color={PALETA[1]} />
+            </TouchableOpacity>
         </View>
     );
 };
@@ -32,13 +38,15 @@ const Header = (props) => {
 const estilos = StyleSheet.create({
 
     header: {
-        backgroundColor: PALETA[2],
+        backgroundColor: '#FFF',
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingTop: 50,
-        paddingBottom: 20
+        paddingBottom: 20,
+        borderBottomWidth: 0.5,
+        borderColor: 'darkgrey'
     },
 
     datosHeader: {
@@ -49,21 +57,22 @@ const estilos = StyleSheet.create({
     },
 
     txtHeader: {
+        fontSize: 23,
         fontWeight: 'bold',
         marginHorizontal: 10,
-        color: '#FFF'
+        color: PALETA[1]
     },
 
     logoHeader: {
         display: 'flex',
         justifyContent: 'center',
-        paddingHorizontal: 10
+        paddingLeft: 10
     },
     shadowed: {
         shadowColor: PALETA[1],
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
+        shadowOffset: { width: 0, height: 1, },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
         elevation: 4
     }
 })

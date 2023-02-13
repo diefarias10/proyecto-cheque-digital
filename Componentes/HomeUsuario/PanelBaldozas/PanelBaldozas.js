@@ -24,7 +24,7 @@ const PanelBaldozas = (props) => {
 
     const obtengoCantidades = () => {
         /*Obtengo los cheques por API*/
-
+      
         fetch(SERVICIOS.ChequesPersona + '1,1,' + data.cedula,
             {
                 method: 'GET',
@@ -44,7 +44,7 @@ const PanelBaldozas = (props) => {
                 }
 
                 responseJson.forEach((object) => {
-                    object.ChequesLibrados.forEach((cheque) => {
+                    object.ChequesLibrados?.forEach((cheque) => {
 
                         switch (cheque.EstadoCheque) {
                             case 'PENDIENTE DE ACEPTAR':
@@ -59,20 +59,23 @@ const PanelBaldozas = (props) => {
                             case 'DEPOSITADO':
                                 cantidades.depositados += 1
                                 break
+                            case 'ENVIADO SECURECHECK':
+                                cantidades.securecheck += 1
+                                break
 
                         }
                     })
 
-                    object.ChequesRecibidos ?
+                 
 
-                        object.ChequesRecibidos.forEach((cheque) => {
+                        object.ChequesRecibidos?.forEach((cheque) => {
                             cantidades.cartera += 1
 
                             if (cheque.EstadoCheque == 'ENVIADO SECURECHECK') {
                                 cantidades.securecheck += 1
                             }
                         })
-                        : console.log('')
+                        
                 })
 
                 /* setContadores({
@@ -85,37 +88,37 @@ const PanelBaldozas = (props) => {
                  })*/
 
                 setBaldozas([{
-                    titulo: 'CARTERA',
+                    titulo: 'Cartera',
                     imagen: require('../../../assets/Cartera.png'),
                     cantidad: cantidades.cartera,
                     texto: 'Cheques recibidos en cartera'
                 },
                 {
-                    titulo: 'LIBRADOS',
+                    titulo: 'Librados',
                     imagen: require('../../../assets/Librados.png'),
                     cantidad: cantidades.librados,
                     texto: 'Cheques librados por ti'
                 },
                 {
-                    titulo: 'ACEPTADOS',
+                    titulo: 'Aceptados',
                     imagen: require('../../../assets/Aceptados.png'),
                     cantidad: cantidades.aceptados,
                     texto: 'Cheques aceptados por beneficiario'
                 },
                 {
-                    titulo: 'RECHAZADOS',
+                    titulo: 'Rechazados',
                     imagen: require('../../../assets/Rechazados.png'),
                     cantidad: cantidades.rechazados,
                     texto: 'Cheques rechazados por beneficiario'
                 },
                 {
-                    titulo: 'DEPOSITADOS',
+                    titulo: 'Depositados',
                     imagen: require('../../../assets/Depositados.png'),
                     cantidad: cantidades.depositados,
                     texto: 'Cheques depositados en banco'
                 },
                 {
-                    titulo: 'SECURECHECK',
+                    titulo: 'SecureCheck',
                     imagen: require('../../../assets/DepositadosSC.png'),
                     cantidad: cantidades.securecheck,
                     texto: 'Cheques depositados en SecureCheck'
@@ -127,13 +130,14 @@ const PanelBaldozas = (props) => {
     /*TODO: HACER QUE EL USEFFECT SE EJECUTE CADA VEZ QUE EL USUARIO HAGA SCROLL PARA ACUTALIZAR CON REFRESHCONTROL*/
 
     return (
-        <View style={{ flex: 1,width: '100%', alignItems: 'center'}}>
-            
+        <View style={{ flex: 1, width: '100%', alignItems: 'center' }}>
+
             <FlatList
                 onRefresh={() => obtengoCantidades()}
                 refreshing={loading}
                 keyExtractor={(item, index) => index.toString()}
                 data={baldozas}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                     <Baldoza
                         nombre={item.titulo}
@@ -143,8 +147,8 @@ const PanelBaldozas = (props) => {
                     />
                 )}
             />
-            
-           
+
+
         </View>
 
     );

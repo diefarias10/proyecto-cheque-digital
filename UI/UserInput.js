@@ -5,17 +5,17 @@ import { Ionicons, Entypo } from '@expo/vector-icons';
 import PALETA from '../Utilidades/Paleta';
 
 
-const UserInput = ({ label, teclado, icono, onChange, tipo, error, placeholder,alineacion, onFocus = () => { } }) => {
+const UserInput = ({ label, teclado, icono, onChange, tipo, error, placeholder, alineacion, onFocus = () => { } }) => {
     const [ocultarTexto, setOcultarTexto] = useState(true)
     const [focus, setFocus] = useState(false)
 
     return (
-        <View style={{ marginVertical: 10, }}>
+        <View style={{ marginVertical: 10}}>
             <View >
-                <Text style={estilos.inputLabel}>{label}</Text>
+                <Text style={[estilos.inputLabel,{fontWeight: focus ? 'bold' : 'normal'}]}>{label}</Text>
             </View>
 
-            <View style={[estilos.inputContainer, { borderColor: error ? PALETA.error : focus ? PALETA[3] : 'transparent' }]} >
+            <View style={[estilos.inputContainer, { borderColor: error ? PALETA.error : focus ? PALETA[3] : PALETA[1] }]} >
 
                 <Ionicons name={icono} size={30} color={error ? PALETA.error : PALETA[2]} style={estilos.inputIcon} />
 
@@ -43,9 +43,6 @@ const UserInput = ({ label, teclado, icono, onChange, tipo, error, placeholder,a
                         :
                         <Ionicons name={icono} size={35} color="#FFF" style={estilos.inputIcon} />
                 }
-
-
-
             </View>
         </View>
     )
@@ -55,16 +52,17 @@ const estilos = StyleSheet.create({
 
     inputLabel: {
         color: '#FFF',
-        fontSize: 14
+        fontSize: 14,
+       
     },
 
     inputContainer: {
         width: '100%',
-        marginTop: 5,
+       
         flexDirection: 'row',
         backgroundColor: '#FFF',
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 4,
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 5,

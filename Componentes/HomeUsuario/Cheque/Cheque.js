@@ -51,10 +51,10 @@ const Cheque = (props) => {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} /*FILA 1*/ >
                         <View /*NUMERO CHEQUE*/>
                             <Text style={estilos.textoChequeNum}>
-                                # {props.numero}
+                                #{props.numero}
                             </Text>
                         </View>
-                        <View style={{ flexDirection: 'row', backgroundColor: '#FFFFFF80', borderRadius: 5, paddingHorizontal: 5, justifyContent: 'flex-end' }} /*IMPORTE*/>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#FFFFFF80', borderRadius: 3, paddingHorizontal: 5, alignItems: 'center', justifyContent: 'center' }} /*IMPORTE*/>
                             <Text style={estilos.textoChequeMoneda}>
                                 {monedaCheque}
                             </Text>
@@ -65,7 +65,7 @@ const Cheque = (props) => {
                     </View>
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginVertical: 5 }} /*FILA 3*/>
-                        <View /*EMISION*/>
+                        <View style={{ borderBottomColor: PALETA[1] }} /*EMISION*/>
                             <Text>Emision:</Text>
                             <Text style={estilos.textoChequeNum}>
                                 <Text style={{ fontWeight: 'bold' }}>
@@ -76,7 +76,7 @@ const Cheque = (props) => {
 
                         {
                             props.tipo === '2' || props.tipo === 'DIFERIDO' ?
-                                <View /*VENCIMIENTO*/>
+                                <View style={{ borderBottomColor: PALETA[1], alignItems: 'flex-end' }} /*VENCIMIENTO*/>
                                     <Text>Vencimiento:</Text>
                                     <Text style={estilos.textoChequeNum}>
                                         <Text style={{ fontWeight: 'bold' }}>
@@ -85,12 +85,13 @@ const Cheque = (props) => {
                                     </Text>
                                 </View> : <View />
                         }
+
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 30 }}/*FILA 4*/>
-                        <View >
+                        <View style={{ borderBottomColor: PALETA[1], width: '80%' }}>
                             <Text>Beneficiario:</Text>
                             <Text style={estilos.textoCheque}>
-                                <Text style={{ fontWeight: 'bold' }}>{props.beneficiario}  {props.beneficiarioCI}
+                                <Text style={{ fontWeight: 'bold' }}>{props.beneficiario}   {props.beneficiarioCI}
                                 </Text>
                             </Text>
                         </View>
@@ -106,20 +107,19 @@ const Cheque = (props) => {
 
 
             <View style={estilos.tagContainer}>
-
-                <TagCheque tipo='firmado' icono='signature' />
+                {props.firmado ? <TagCheque tipo='firmado' icono='signature' /> : <View />}
 
                 {
                     props.estado == 'LIBRADO' ? <TagCheque tipo='librado' icono='check' /> :
                         props.estado == 'CHEQUE ACEPTADO' ? <TagCheque tipo='correcto' icono='check-double' /> :
                             props.estado == 'CHEQUE RECHAZADO' || props.estado == 'ANULADO LIBRADOR' ? <TagCheque tipo='error' icono='ban' /> :
                                 props.estado == 'PENDIENTE DE ACEPTAR' ? <TagCheque tipo='pendiente' icono='clock' /> :
-                                    <View />
+                                    props.estado == 'DEPOSITADO' ? <TagCheque tipo='depositado' icono='donate' /> :
+                                        <View />
                 }
+                
             </View>
         </TouchableOpacity>
-
-
     );
 }
 
@@ -128,24 +128,21 @@ const estilos = StyleSheet.create({
     cheque: {
         backgroundColor: '#d7f0ff',
         borderColor: '#5BB9F1',
+        borderWidth: 1,
         marginTop: 20,
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 8,
-        elevation: 5,
         width: '100%',
-        shadowColor: PALETA[1],
-        shadowOffset: { width: -2, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
     },
 
     chequeDiferido: {
         backgroundColor: '#FFE993',
         borderColor: '#FFBD59',
+        borderWidth: 1,
         marginTop: 20,
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 8,
-        elevation: 4
+      
     },
 
     textoCheque: {
@@ -164,7 +161,9 @@ const estilos = StyleSheet.create({
         color: PALETA[1],
         fontSize: 22,
         marginRight: 8,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+
+
     },
 
     textoChequeImporte: {
@@ -178,16 +177,16 @@ const estilos = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         height: 30,
-        bottom: -5,
-        left: 5
+        bottom: -1,
+        left: 10
     },
-
 
     shadowed: {
         shadowColor: PALETA[1],
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
         shadowRadius: 3,
+        elevation: 4
     }
 
 })

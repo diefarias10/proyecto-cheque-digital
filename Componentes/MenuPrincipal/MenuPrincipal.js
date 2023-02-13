@@ -2,31 +2,12 @@ import React from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { Entypo, FontAwesome } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
-import GestureFlipView from 'react-native-gesture-flip-card';
 import PALETA from '../../Utilidades/Paleta';
 
 const MenuPrincipal = ({ navigation }) => {
 
 
-    const renderFrontOK = () => {
-        return (
-            <View style={{ width: 300, height: 190,backgroundColor: 'red'}}>
-
-                <Text>CARA A</Text>
-
-            </View>
-        )
-    }
-
-    const renderBackOK = () => {
-        return (
-            <View style={{ width: 300, height: 190,backgroundColor: 'yellow'}}>
-
-                <Text>CARA B</Text>
-
-            </View>
-        )
-    }
+    
 
 
     return (
@@ -34,23 +15,13 @@ const MenuPrincipal = ({ navigation }) => {
             <View style={{ flex: 1, width: '100%', backgroundColor: '#FFF' }}>
                 <View style={{ flex: 1, backgroundColor: PALETA[2], borderBottomLeftRadius: 150 }} />
             </View>
-
-
-
-            <GestureFlipView width={300} height={190}>
-                {renderFrontOK()}
-                {renderBackOK()}
-            </GestureFlipView>
-               
-        
-
-
+            
             <View style={{ width: '100%', backgroundColor: PALETA[2] }}>
                 <View style={[estilos.menuPrincipal]}>
-                    <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginVertical: 10 }}>
+                    <View style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 10 }}>
                         <Image source={require('../../assets/CHDLoginLogo.png')} style={{ width: 200, height: 80 }} />
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around' , paddingBottom: 10}}>
                         <TouchableOpacity style={[estilos.btnMenu, estilos.shadowedBtn]} onPress={() => navigation.navigate('Login Bancarizado')}>
                             <View style={{ marginBottom: 10 }}>
                                 <FontAwesome name="bank" size={45} color="#FFF" />

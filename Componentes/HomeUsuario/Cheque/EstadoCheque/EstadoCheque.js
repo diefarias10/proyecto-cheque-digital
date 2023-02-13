@@ -26,11 +26,14 @@ const EstadoCheque = ({ estadoCheque }) => {
             case 'NUEVO':
                 setEstadoTipo(estilos.textoChequeEstadoNuevo)
                 break
+            case 'DEPOSITADO':
+                setEstadoTipo(estilos.textoChequeEstadoDepo)
+                break
         }
     }, [])
 
     return (
-        <View style={[{elevation: 2}, estilos.shadowed]}>
+        <View style={[{ elevation: 2 }, estilos.shadowed]}>
             <Text style={estadoTipo}>
 
                 {estadoCheque}
@@ -78,6 +81,17 @@ const estilos = StyleSheet.create({
     textoChequeEstadoNuevo: {
         backgroundColor: '#cff4fc',
         color: '#055160',
+        fontWeight: 'bold',
+        paddingVertical: 2,
+        width: '100%',
+        marginVertical: 5,
+        textAlign: 'center',
+        elevation: 2
+    },
+
+    textoChequeEstadoDepo: {
+        backgroundColor: '#17a2b8',
+        color: '#FFF',
         fontWeight: 'bold',
         paddingVertical: 2,
         width: '100%',

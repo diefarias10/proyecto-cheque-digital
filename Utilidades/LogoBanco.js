@@ -7,8 +7,6 @@ const LogoBanco = ({ banco, ancho, alto }) => {
     const [bancoLogo, setBancoLogo] = useState({})
 
 
-
-
     useEffect(() => {
 
         switch (banco) {

@@ -74,9 +74,9 @@ const estilos = StyleSheet.create({
 
     shadowedBtn: {
         shadowColor: PALETA[1],
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
         elevation: 4
     }
 

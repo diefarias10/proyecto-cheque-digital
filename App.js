@@ -7,6 +7,7 @@ import LoginBancarizado from './Componentes/Login/LoginBancarizado';
 import LoginNoBancarizado from './Componentes/Login/LoginNoBancarizado';
 import HomeBanking from './Componentes/HomeBanking/HomeBanking';
 import Cartera from './Componentes/HomeUsuario/Cartera/Cartera';
+import Header from './Componentes/Header/Header';
 import Tabs from './Componentes/Navegacion/FooterNav';
 import { ContextoProvider } from './Storage/ContextoProvider';
 import deshabilitarHeader from './Utilidades/DeshabilitarHeader';

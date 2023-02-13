@@ -1,15 +1,29 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import PALETA from '../../Utilidades/Paleta';
+import { FontAwesome5, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 
-const HeaderTitulo = (props) => {
+
+const HeaderTitulo = ({ titulo, formCheque }) => {
 
     return (
-        <View style={[estilos.header, estilos.shadow]}>
-            <View  style={estilos.tituloHeader}>
-                <Text style={{fontWeight:'bold', fontSize: 20, color: '#FFF'}}>{props.titulo}</Text>
+        <View style={[estilos.header]}>
+            <View style={estilos.tituloHeader}>
+                <Text style={{ fontWeight: 'bold', fontSize: 25, color: PALETA[1], marginLeft: 10 }}>
+                    {titulo}
+                </Text>
             </View>
+
+            {
+                formCheque != null ?
+
+                    <TouchableOpacity style={estilos.btnAgregar} onPress={() => { formCheque(true) }}>
+                        <Ionicons name="add-circle-sharp" size={50} color={PALETA[3]} />
+                    </TouchableOpacity>
+
+                    :
+                    <View />
+            }
         </View>
     );
 };
@@ -17,27 +31,36 @@ const HeaderTitulo = (props) => {
 const estilos = StyleSheet.create({
 
     header: {
-        backgroundColor: PALETA[2],
+        backgroundColor: '#FFF',
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
         paddingTop: 50,
         paddingBottom: 20,
-        justifyContent: 'space-around',
-        elevation: 4
+        borderBottomWidth: 0.5,
+        borderColor: 'darkgrey'
     },
 
     tituloHeader: {
+        width: '80%',
         justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1,
+        alignItems: 'flex-start',
+    },
+
+    btnAgregar: {
+        position: 'absolute',
+        right: 0,
+        top: 40,
+        marginRight: 10,
+
     },
 
     shadow: {
         shadowColor: PALETA[1],
-        shadowOffset: { width: 0, height: 3, },
+        shadowOffset: { width: 0, height: 1, },
         shadowOpacity: 0.2,
         shadowRadius: 3,
+        elevation: 4
     }
 })
 

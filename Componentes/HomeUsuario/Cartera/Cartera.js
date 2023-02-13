@@ -54,7 +54,7 @@ const Cartera = () => {
                                     CuentaCheque: cheque.Cuenta.trim(),
                                     BeneficiarioCheque: cheque.BeneficiarioCheque.trim(),
                                     CMC7Cheque: cheque.CMC7Cheque.trim(),
-                                   
+
                                 }
                             ])
                         })
@@ -68,6 +68,7 @@ const Cartera = () => {
     const switchDetalle = (item) => { /* Abre/Cierra detalle de cheque seleccionado */
         setVerDetalle(!verDetalle)
         setVerCheque(item)
+        setRefrescar(!refrescar)
     }
 
     return (
@@ -92,6 +93,7 @@ const Cartera = () => {
                         data={cheques}
                         onRefresh={() => obtengoCheques()}
                         refreshing={loading}
+                        showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => (
                             <Cheque
                                 numero={item.NroCheque}
@@ -106,14 +108,14 @@ const Cartera = () => {
                                 beneficiario={item.BeneficiarioCheque}
                                 banda={item.CMC7Cheque}
                                 visualizar={switchDetalle}
-                                
+
                             />
                         )}
                     />
                 </View>
             }
 
-            <ChequeDetalleModal visible={verDetalle} cheque={verCheque} cerrarDetalle={switchDetalle} tipo='Recibidos'/>
+            <ChequeDetalleModal visible={verDetalle} cheque={verCheque} cerrarDetalle={switchDetalle} tipo='Recibidos' />
 
         </View>
     );
@@ -123,10 +125,11 @@ const estilos = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: PALETA[1],
+        backgroundColor: '#FFF',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '100%'
+        height: '100%',
+       
     },
 
     listaVacia: {

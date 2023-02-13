@@ -10,10 +10,11 @@ import FormChequeModal from './FormChequeModal';
 import { FontAwesome5, Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import PopupError from '../../../UI/PopupError';
 import PopupExito from '../../../UI/PopupExito';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const LibrarCheque = () => {
-    const [modoLibrar, setModoLibrar] = useState(false)
     const { data, setData, refrescar, setRefrescar } = useContext(Contexto)
+    const [modoLibrar, setModoLibrar] = useState(false)
     const [numReserv, setNumReserv] = useState(0)
     const [cheques, setCheques] = useState([])
     const [loading, setLoading] = useState(true)
@@ -25,13 +26,15 @@ const LibrarCheque = () => {
     const [txtExito, setTxtExito] = useState('')
 
 
+
     useEffect(() => {
         obtengoCheques()
+        reservoNumero()
     }, [refrescar])
 
 
     const obtengoCheques = () => {
-        /* Obtengo los cheques por API */
+        // Obtengo los cheques por API 
         fetch(SERVICIOS.ChequesPersona + '1,1,' + data.cedula,
             {
                 method: 'GET',
@@ -45,7 +48,7 @@ const LibrarCheque = () => {
 
                 responseJson.forEach((object) => {
 
-                    object.ChequesLibrados.forEach((cheque) => { // Recorro los cheques LIBRADOS de la persona
+                    object.ChequesLibrados?.forEach((cheque) => { // Recorro los cheques LIBRADOS de la persona
 
                         setCheques(cheques => [
                             ...cheques,
@@ -61,7 +64,8 @@ const LibrarCheque = () => {
                                 CuentaCheque: cheque.Cuenta.trim(),
                                 BeneficiarioCheque: cheque.BeneficiarioCheque.trim(),
                                 CMC7Cheque: cheque.CMC7Cheque.trim(),
-                                Recibido: false
+                                Recibido: false,
+                                Firmado: true
                             }
                         ])
                     }
@@ -72,7 +76,7 @@ const LibrarCheque = () => {
 
 
     const reservoNumero = () => {
-        /* RESERVO NUMERO PARA EL CHEQUE NUEVO */
+        // RESERVO NUMERO PARA EL CHEQUE NUEVO 
         fetch(SERVICIOS.ReservaNroCheque + data.bancoID + "," + data.cedula,
             {
                 method: 'GET',
@@ -88,7 +92,26 @@ const LibrarCheque = () => {
     }
 
     const agregarChequeHandler = (chequeNuevo) => {
-        /* LLAMO SERVICIO DE ALTA CHEQUE */
+        // LLAMO SERVICIO DE ALTA CHEQUE 
+
+        console.log('Cheque a dar de alta: ')
+        console.log('Nro: ' + numReserv)
+        console.log('Banco:' + chequeNuevo.BancoID)
+        console.log('SucursalNro: ' + chequeNuevo.SucursalNro)
+        console.log('Cuenta Cheque: ' + chequeNuevo.CtaChequeNro)
+        console.log('Sucursal: ' + chequeNuevo.SucursalNro)
+        console.log('Cuenta nombre: ' + chequeNuevo.CuentaNombre)
+        console.log('Tipo Cheque: ' + chequeNuevo.Tipo)
+        console.log('Moneda: ' + chequeNuevo.MonedaCheque)
+        console.log('Cruzado: ' + chequeNuevo.EsCruzado)
+        console.log('No a la orden: ' + chequeNuevo.EsNoALaOrden)
+        console.log('Benef. tipo doc: ' + chequeNuevo.BenefTipoDoc)
+        console.log('Benef nro doc: ' + chequeNuevo.BenefNroDoc)
+        console.log('Benef nombre: ' + chequeNuevo.BenefNombre)
+        console.log('Importe: ' + chequeNuevo.ImporteCheque)
+        console.log('Vencimiento: ' + chequeNuevo.VencimientoCheque)
+        console.log('Firmado: ' + chequeNuevo.Firmado)
+
 
         fetch(SERVICIOS.AltaCheque
             + numReserv + ","
@@ -105,7 +128,8 @@ const LibrarCheque = () => {
             + chequeNuevo.BenefNroDoc + ","
             + chequeNuevo.BenefNombre + ","
             + chequeNuevo.ImporteCheque + ","
-            + chequeNuevo.VencimientoCheque,
+            + chequeNuevo.VencimientoCheque + ","
+            + chequeNuevo.Firmado,
             {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
@@ -113,7 +137,7 @@ const LibrarCheque = () => {
             .then((response) => response.json())
             .then((responseJson) => {
 
-                if (responseJson.exito === false) {
+                if (responseJson.exito == false) {
                     setMostrarPopupError(!mostrarPopupError)
                     setTxtError('No se pudo librar el cheque')
                     setTimeout(() => {
@@ -122,7 +146,7 @@ const LibrarCheque = () => {
                 }
                 else {
                     setMostrarPopupExito(!mostrarPopupExito)
-                    setTxtError('Cheque librado con exito!')
+                    setTxtExito('Cheque librado con exito!')
                     setTimeout(() => {
                         setMostrarPopupExito(true)
                     }, 2000);
@@ -143,30 +167,34 @@ const LibrarCheque = () => {
 
                         }])
                 }
+                setRefrescar(!refrescar)
+
             })
-        setRefrescar(!refrescar)
+
     }
 
-    const switchForm = () => { /* Abre/Cierra formulario de cheque nuevo */
-        reservoNumero()
+
+
+    const switchForm = () => { // Abre / Cierra formulario de cheque nuevo
+
         setModoLibrar(!modoLibrar)
 
     }
 
-    const switchDetalle = (item) => { /* Abre/Cierra detalle de cheque seleccionado */
+    const switchDetalle = (item) => { // Abre/Cierra detalle de cheque seleccionado 
         setVerDetalle(!verDetalle)
-        setVerCheque(item)
+        if (item != undefined) {
+            setVerCheque(item)
+        }
+        setRefrescar(!refrescar)
     }
 
 
     return (
         <View style={estilos.container}>
 
-            <HeaderTitulo titulo="Cheques librados" />
+            <HeaderTitulo titulo="Cheques librados" formCheque={setModoLibrar} />
 
-            <TouchableOpacity style={[estilos.btnMenuSelec, estilos.shadowedBtn]} onPress={switchForm} /*BOTON NUEVO +*/>
-                <MaterialIcons name="add" size={50} color="#FFF" />
-            </TouchableOpacity>
 
             {
                 loading ? <ActivityIndicator size='large' style={{ flex: 1 }} /> : cheques == '' ?
@@ -180,14 +208,16 @@ const LibrarCheque = () => {
                             </Text>
                         </TouchableOpacity>
                     </View>
-
+                    
                     :
+
                     <View style={estilos.listaCheques}>
                         <FlatList
                             onRefresh={() => obtengoCheques()}
                             refreshing={loading}
                             keyExtractor={(item, index) => index.toString()}
                             data={cheques}
+                            showsVerticalScrollIndicator={false}
                             renderItem={({ item }) => (
                                 <Cheque
                                     numero={item.NroCheque}
@@ -204,6 +234,7 @@ const LibrarCheque = () => {
                                     banda={item.CMC7Cheque}
                                     visualizar={switchDetalle}
                                     recibido={item.Recibido}
+                                    firmado={item.Firmado}
                                 />
                             )}
                         />
@@ -217,7 +248,7 @@ const LibrarCheque = () => {
 
             <PopupError visible={mostrarPopupError} texto={txtError} />
 
-            <PopupExito visible={mostrarPopupExito} texto={txtError} />
+            <PopupExito visible={mostrarPopupExito} texto={txtExito} />
 
 
         </View>
@@ -228,7 +259,7 @@ const estilos = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: PALETA[1],
+        backgroundColor: '#FFF',
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%'
@@ -241,11 +272,12 @@ const estilos = StyleSheet.create({
     },
 
     listaCheques: {
-        width: '90%',
+
         flex: 1,
     },
 
     btnMenuSelec: {
+
         backgroundColor: PALETA[3],
         borderBottomRightRadius: 20,
         borderBottomLeftRadius: 20,

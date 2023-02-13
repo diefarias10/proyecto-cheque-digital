@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, View, Image, TouchableOpacity, Touchable, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeUsuario from '../HomeUsuario/HomeUsuario';
 import Cartera from '../HomeUsuario/Cartera/Cartera';
 import LibrarCheque from '../HomeUsuario/LibrarCheque/LibrarCheque';
 import { StyleSheet } from 'react-native';
-import { FontAwesome5, Entypo } from '@expo/vector-icons';
+import { FontAwesome5, Entypo, Ionicons, AntDesign } from '@expo/vector-icons';
 import PALETA from '../../Utilidades/Paleta';
+import LogoBanco from '../../Utilidades/LogoBanco';
+import { Contexto } from '../../Storage/ContextoProvider';
 
 
 const Tab = createBottomTabNavigator();
@@ -17,29 +19,24 @@ const BotonLibrar = ({ children, onPress }) => (
     <TouchableOpacity
         style={{
 
-            justifyContent: 'center',
-            alignItems: 'center',
-            top: Platform.OS === 'android' ? -15 : 0,
+            marginHorizontal: 40,
+
             ...estilos.shadowBtn
         }}
         onPress={onPress}
     >
-        <View style={{
-            width: 90,
-            height: 90,
-            borderRadius: 50,
-            backgroundColor: PALETA[2],
-            elevation: 4
-        }}
-        >
-            {children}
-        </View>
+
+        {children}
+
     </TouchableOpacity>
 );
 
 
 
 const Tabs = ({ route }) => {
+
+    const { data, setData } = useContext(Contexto)
+
 
     return (
         <Tab.Navigator
@@ -50,10 +47,8 @@ const Tabs = ({ route }) => {
             <Tab.Screen name="Home" component={HomeUsuario} options={{
                 tabBarIcon: ({ focused }) => (
                     <View style={estilos.btnTab}>
-                        <Image
-                            source={require('../../assets/home.png')}
-                            style={{ width: 30, height: 30, tintColor: focused ? PALETA[3] : PALETA[1] }} />
-                        <Text style={[estilos.btnTabLabel, { color: focused ? PALETA[3] : PALETA[1] }]}>
+                        <Entypo name="home" size={40} color={focused ? PALETA[3] : '#FFF'} />
+                        <Text style={[estilos.btnTabLabel, { color: focused ? PALETA[3] : '#FFF' }]}>
                             INICIO
                         </Text>
                     </View>
@@ -62,9 +57,19 @@ const Tabs = ({ route }) => {
             <Tab.Screen name="Librar" component={LibrarCheque}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <Image
-                            source={require('../../assets/cheque.png')}
-                            style={{ width: 60, height: 60, tintColor: focused ? '#FFF' : PALETA[4] }} />
+
+                        focused ?
+                            
+                                <LogoBanco banco={data.bancoID} ancho={80} alto={80} />
+                           
+                            :
+                            <View style={estilos.btnTabCenter}>
+                                <Image
+                                    source={require('../../assets/new.png')}
+                                    style={{ width: 90, height: 90, tintColor:  PALETA[4]  }} />
+
+                            </View>
+
                     ),
                     tabBarButton: (props) => (
                         <BotonLibrar {...props} />
@@ -74,10 +79,8 @@ const Tabs = ({ route }) => {
             <Tab.Screen name="Cartera" component={Cartera} options={{
                 tabBarIcon: ({ focused }) => (
                     <View style={estilos.btnTab}>
-                        <Image
-                            source={require('../../assets/wallet.png')}
-                            style={{ width: 32, height: 32, tintColor: focused ? PALETA[3] : PALETA[1] }} />
-                        <Text style={[estilos.btnTabLabel, { color: focused ? PALETA[3] : PALETA[1] }]}>
+                       <Entypo name="wallet" size={40} color={focused ? PALETA[3] : '#FFF'} />
+                        <Text style={[estilos.btnTabLabel, { color: focused ? PALETA[3] : '#FFF' }]}>
                             CARTERA
                         </Text>
                     </View>
@@ -95,14 +98,25 @@ const estilos = StyleSheet.create({
         left: 10,
         right: 10,
         height: '10%',
-        backgroundColor: PALETA[4],
+        backgroundColor: PALETA[1],
         borderRadius: 15,
+
     },
 
     btnTab: {
         justifyContent: 'center',
         alignItems: 'center',
         top: Platform.OS === 'ios' ? 15 : 0,
+    },
+
+    btnTabCenter: {
+
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 70,
+        top: Platform.OS === 'ios' ? -1 : 0,
+        width: 80,
+        height: 80
     },
 
     btnTabLabel: {

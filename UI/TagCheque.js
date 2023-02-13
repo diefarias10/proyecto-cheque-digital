@@ -13,7 +13,8 @@ const TagCheque = ({ tipo, icono }) => {
                 tipo == 'error' ? PALETA.error :
                     tipo == 'pendiente' ? '#ffc107' :
                         tipo == 'correcto' ? '#28a745' :
-                            PALETA[2],
+                            tipo == 'depositado' ? '#17a2b8' :
+                                PALETA[2],
 
 
         }]}>
@@ -27,16 +28,14 @@ const estilos = StyleSheet.create({
 
     tagContainer: {
         width: 50,
-        marginRight: 5,
-        borderTopRightRadius: 5,
-        borderTopLeftRadius: 5,
-        borderBottomLeftRadius: 2,
-        borderBottomRightRadius: 2,
+        marginRight: 10,
+        borderTopRightRadius: 10,
+        borderTopLeftRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: PALETA[1],
         shadowOffset: { width: 2, height: -2 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0,
         shadowRadius: 2,
         elevation: 4
     }
