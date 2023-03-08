@@ -10,9 +10,9 @@ const UserInput = ({ label, teclado, icono, onChange, tipo, error, placeholder, 
     const [focus, setFocus] = useState(false)
 
     return (
-        <View style={{ marginVertical: 10}}>
+        <View style={{ marginVertical: 10 }}>
             <View >
-                <Text style={[estilos.inputLabel,{fontWeight: focus ? 'bold' : 'normal'}]}>{label}</Text>
+                <Text style={[estilos.inputLabel, { fontWeight: focus ? 'bold' : 'normal' }]}>{label}</Text>
             </View>
 
             <View style={[estilos.inputContainer, { borderColor: error ? PALETA.error : focus ? PALETA[3] : PALETA[1] }]} >
@@ -51,14 +51,13 @@ const UserInput = ({ label, teclado, icono, onChange, tipo, error, placeholder, 
 const estilos = StyleSheet.create({
 
     inputLabel: {
-        color: '#FFF',
+        color: PALETA[1],
         fontSize: 14,
-       
+        marginBottom: 5
     },
 
     inputContainer: {
         width: '100%',
-       
         flexDirection: 'row',
         backgroundColor: '#FFF',
         borderWidth: 1,

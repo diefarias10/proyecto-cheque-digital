@@ -11,7 +11,7 @@ import PALETA from '../../../Utilidades/Paleta';
 import SERVICIOS from '../../../Utilidades/Servicios';
 import PopupError from '../../../UI/PopupError';
 import * as LocalAuthentication from 'expo-local-authentication';
-
+import DatosChequeNuevo from './DatosChequeNuevo';
 
 
 const FormChequeModal = (props) => {
@@ -21,6 +21,7 @@ const FormChequeModal = (props) => {
     const [autenticacion, setAutenticacion] = useState(false)
     const [txtError, setTxtError] = useState('')
     const [mostrarPopupError, setMostrarPopupError] = useState(true)
+    const [mostrarDatosCheque, setMostrarDatosCheque] = useState(true)
     const [datosChequeNuevo, setDatosChequeNuevo] = useState({
         tipoCheque: '1',
         monedaCheque: '1',
@@ -204,7 +205,6 @@ const FormChequeModal = (props) => {
 
         <Modal visible={props.visible} animationType='slide' transparent={false}>
 
-
             <SafeAreaView style={{ flex: 1, backgroundColor: PALETA[2] }}>
 
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -214,7 +214,6 @@ const FormChequeModal = (props) => {
                             <Text style={estilos.txtTituloForm}>
                                 Cheque nuevo
                             </Text>
-
 
                             <TouchableOpacity style={estilos.btnCerrarForm} onPress={cancelarLibrado}>
                                 <Ionicons name="close-circle-sharp" size={45} color={PALETA.error} />
@@ -266,190 +265,25 @@ const FormChequeModal = (props) => {
 
                             </View>
                         </View>
-
                     </View>
                 </TouchableWithoutFeedback>
 
-                <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding'>
-                    <View style={{ backgroundColor: '#FFF', flex: 1 }}>
+                <DatosChequeNuevo
+                    visible={mostrarDatosCheque}
+                    datosChequeNuevo={datosChequeNuevo}
+                    setDatosChequeNuevo={setDatosChequeNuevo}
+                    cuentasUsuario={cuentasUsuario}
+                    cambiarCuentaCheque={cambiarCuentaCheque}
+                    cambiarBenef={cambiarBenef}
+                    cambiarTipoDoc={cambiarTipoDoc}
+                    cambiarNroDoc={cambiarNroDoc}
+                    tiposDoc={tiposDoc}
+                    cambiarImporte={cambiarImporte}
+                    cambiarSuc={cambiarSuc}
+                    cambiarNroSuc={cambiarNroSuc}
+                    setMostrarDatosCheque={setMostrarDatosCheque}
+                />
 
-                        <ScrollView style={[{ flex: 1 }]} horizontal={true} showsHorizontalScrollIndicator={false} >
-                            <View style={[estilos.formContainer]}>
-
-                                <View>
-                                    <Text style={estilos.tituloBloque}>Detalles del cheque</Text>
-                                    <View style={estilos.bloqueForm} /* BLOQUE A */>
-                                        <View style={estilos.selector}>
-                                            <TouchableOpacity
-                                                style={[estilos.btnSelectorIzq,
-                                                { backgroundColor: datosChequeNuevo.tipoCheque == '1' ? PALETA[3] : '#FFF' },
-                                                { borderColor: datosChequeNuevo.tipoCheque == '1' ? PALETA[3] : PALETA[3] }]}
-
-                                                onPress={() => {
-                                                    setDatosChequeNuevo({ ...datosChequeNuevo, tipoCheque: '1', vencCheque: '' })
-                                                }}>
-                                                <Text style={[estilos.selectorBtnTxt, { color: datosChequeNuevo.tipoCheque == '1' ? '#FFF' : PALETA[2] }]}>Común</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={[estilos.btnSelectorDer,
-                                                { backgroundColor: datosChequeNuevo.tipoCheque == '2' ? PALETA[3] : '#FFF' },
-                                                { borderColor: datosChequeNuevo.tipoCheque == '2' ? PALETA[3] : PALETA[3] }]}
-                                                onPress={() => { setDatosChequeNuevo({ ...datosChequeNuevo, tipoCheque: '2' }) }}>
-                                                <Text style={[estilos.selectorBtnTxt, { color: datosChequeNuevo.tipoCheque == '2' ? '#FFF' : PALETA[2] }]}>Diferido</Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={estilos.selector}>
-                                            <TouchableOpacity
-                                                style={[estilos.btnSelectorIzq,
-                                                { backgroundColor: datosChequeNuevo.monedaCheque == '1' ? PALETA[3] : '#FFF' },
-                                                { borderColor: datosChequeNuevo.monedaCheque == '1' ? PALETA[3] : PALETA[3] }]}
-
-                                                onPress={() => { setDatosChequeNuevo({ ...datosChequeNuevo, monedaCheque: '1' }) }}>
-                                                <Text style={[estilos.selectorBtnTxt, { color: datosChequeNuevo.monedaCheque == '1' ? '#FFF' : PALETA[2] }]}>$ - Pesos</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={[estilos.btnSelectorDer,
-                                                { backgroundColor: datosChequeNuevo.monedaCheque == '2' ? PALETA[3] : '#FFF' },
-                                                { borderColor: datosChequeNuevo.monedaCheque == '2' ? PALETA[3] : PALETA[3] }]}
-                                                onPress={() => { setDatosChequeNuevo({ ...datosChequeNuevo, monedaCheque: '2' }) }}>
-                                                <Text style={[estilos.selectorBtnTxt, { color: datosChequeNuevo.monedaCheque == '2' ? '#FFF' : PALETA[2] }]}>U$S - Dolares</Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={estilos.selector}>
-                                            <TouchableOpacity
-                                                style={[estilos.btnSelectorIzq,
-                                                { backgroundColor: datosChequeNuevo.cruzado == true ? PALETA[3] : '#FFF' },
-                                                { borderColor: datosChequeNuevo.cruzado == true ? PALETA[3] : PALETA[3] }]}
-
-                                                onPress={() => { setDatosChequeNuevo({ ...datosChequeNuevo, cruzado: !datosChequeNuevo.cruzado }) }}>
-                                                <Text style={[estilos.selectorBtnTxt, { color: datosChequeNuevo.cruzado == true ? '#FFF' : PALETA[2] }]}>Cruzado //</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={[estilos.btnSelectorDer,
-                                                { backgroundColor: datosChequeNuevo.noALaOrden == true ? PALETA[3] : '#FFF' },
-                                                { borderColor: datosChequeNuevo.noALaOrden == true ? PALETA[3] : PALETA[3] }]}
-                                                onPress={() => { setDatosChequeNuevo({ ...datosChequeNuevo, noALaOrden: !datosChequeNuevo.noALaOrden }) }}>
-                                                <Text style={[estilos.selectorBtnTxt, { color: datosChequeNuevo.noALaOrden == true ? '#FFF' : PALETA[2] }]}>No a la orden</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                </View>
-
-                                <View >
-                                    <Text style={estilos.tituloBloque}>Valor del cheque</Text>
-                                    <View style={estilos.bloqueForm}/* BLOQUE B */>
-                                        
-                                            <View >
-                                                <Text style={estilos.formLabel} >
-                                                    Cuenta origen
-                                                </Text>
-                                                <View style={estilos.formInput}>
-                                                    <SelectDropdown
-                                                        data={cuentasUsuario.map((cuenta) => { return cuenta.ctaNumero })}
-                                                        onSelect={(selectedItem, index) => {
-                                                            cambiarCuentaCheque(selectedItem)
-                                                        }}
-                                                        buttonTextAfterSelection={(selectedItem, index) => {
-                                                            return selectedItem
-                                                        }}
-                                                        rowTextForSelection={(item, index) => {
-                                                            return item
-                                                        }}
-                                                        rowStyle={{ marginHorizontal: 10 }}
-
-                                                        dropdownStyle={{ borderRadius: 10 }}
-
-                                                        defaultButtonText='Seleccionar'
-
-                                                        buttonStyle={estilos.dropdownForm}
-
-                                                        buttonTextStyle={{ color: 'darkgrey' }}
-
-                                                        dropdownIconPosition='right'
-
-                                                        renderDropdownIcon={() => { return <Ionicons name="chevron-down" size={30} color={PALETA[1]} /> }}
-                                                    />
-                                                </View>
-                                            </View>
-
-                                            <UserInput label='Importe' teclado='numeric' placeholder='Importe del cheque' alineacion='center' onChange={cambiarImporte} />
-                                        
-
-                                        {
-                                            datosChequeNuevo.tipoCheque === '2' ?
-
-
-                                                <UserInput label='Vencimiento' placeholder='DD / MM / AAAA' alineacion='center' onChange={cambiarVenc} />
-
-                                                :
-                                                <View />
-                                        }
-
-
-                                    </View>
-                                </View>
-
-
-                                <View>
-                                    <Text style={estilos.tituloBloque}>Datos de beneficiario</Text>
-                                    <View style={estilos.bloqueForm} /* BLOQUE C */>
-                                        <View >
-                                            <UserInput label='Beneficiario' placeholder='Nombre y apellido' alineacion='center' onChange={cambiarBenef} />
-                                            <Text style={estilos.formLabel} >
-                                                Tipo de documento
-                                            </Text>
-                                            <View style={estilos.formInput}>
-                                                <SelectDropdown
-                                                    data={tiposDoc}
-                                                    onSelect={(selectedItem, index) => {
-                                                        cambiarTipoDoc(selectedItem)
-                                                    }}
-                                                    buttonTextAfterSelection={(selectedItem, index) => {
-                                                        return selectedItem
-                                                    }}
-                                                    rowTextForSelection={(item, index) => {
-                                                        return item
-                                                    }}
-                                                    rowStyle={{ marginHorizontal: 10 }}
-
-                                                    dropdownStyle={{ borderRadius: 10 }}
-
-                                                    defaultButtonText='Seleccionar'
-
-                                                    buttonStyle={estilos.dropdownForm}
-
-                                                    buttonTextStyle={{ color: 'darkgrey' }}
-
-                                                    dropdownIconPosition='right'
-
-                                                    renderDropdownIcon={() => { return <Ionicons name="chevron-down" size={30} color={PALETA[1]} /> }}
-                                                />
-                                            </View>
-                                            <UserInput label='Documento de beneficiario' teclado='numeric' placeholder='N° de documento' alineacion='center' onChange={cambiarNroDoc} />
-                                        </View>
-                                    </View>
-                                </View>
-
-
-                                <View>
-                                    <Text style={estilos.tituloBloque}>Datos de sucursal</Text>
-                                    <View style={estilos.bloqueForm} /* BLOQUE D */>
-
-                                        <UserInput label='Sucursal' placeholder='Nombre sucursal' alineacion='center' onChange={cambiarSuc} />
-
-                                        <UserInput label='Sucursal' teclado='numeric' placeholder='N° Sucursal' alineacion='center' onChange={cambiarNroSuc} />
-
-                                    </View>
-                                </View>
-
-
-                            </View>
-
-                        </ScrollView>
-                    </View>
-                </KeyboardAvoidingView>
                 <PopupError visible={mostrarPopupError} texto={txtError} />
 
             </SafeAreaView >
@@ -512,7 +346,7 @@ const estilos = StyleSheet.create({
         color: PALETA[1],
         marginBottom: 5,
         paddingLeft: 5,
-      
+
     },
 
     btnConfirmarForm: {
